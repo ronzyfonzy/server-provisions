@@ -141,6 +141,32 @@ function installApplication {
 	printf "Application installed\n"
 }
 
+function updateApplication {
+	printf "ReDownloading files\n"
+
+	ProgressBar 0 100
+	wget -q -O "${INSTALL_DIR}/adminer.php" http://www.adminer.org/latest-mysql-en.php
+
+	ProgressBar 25 100
+	wget -q -O "${INSTALL_DIR}/adminer.css" https://raw.githubusercontent.com/vrana/adminer/master/designs/bueltge/adminer.css
+
+	ProgressBar 50 100
+	wget -q -O "${INSTALL_DIR}/plugins/plugin.php" https://raw.githubusercontent.com/vrana/adminer/master/plugins/plugin.php
+
+	ProgressBar 75 100
+	wget -q -O "${INSTALL_DIR}/plugins/tables-filter.php" https://raw.githubusercontent.com/vrana/adminer/master/plugins/tables-filter.php
+
+	ProgressBar 100 100
+
+	printf "Setting up\n"
+
+	sed -i -e 's/?"utf8mb4":"utf8"/?"utf8":"utf8"/g' "${INSTALL_DIR}/adminer.php"
+
+	sudo chown -R ${OWNER} ${INSTALL_DIR}
+
+	printf "Application updated\n"
+}
+
 function setupNginx {
 	printf "Setting up nginx\n"
 
@@ -171,7 +197,11 @@ function _install {
 }
 
 function _update {
-	printf "update"
+	if [ ! -f "${INSTALL_DIR}/index.php" ]; then
+		printf "Adminer not installed\n"
+	else
+		printf "Adminer already installed\n"
+	fi
 }
 
 function _uninstall {
