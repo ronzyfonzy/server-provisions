@@ -132,6 +132,8 @@ function installApplication {
 
 	printf "Setting up\n"
 
+	sed -i -e 's/?"utf8mb4":"utf8"/?"utf8":"utf8"/g' "${INSTALL_DIR}/adminer.php"
+
 	createOrAppendFile "${INSTALL_DIR}/index.php" "${INDEX_PHP_STRING}"
 
 	sudo chown -R ${OWNER} ${INSTALL_DIR}
