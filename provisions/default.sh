@@ -60,6 +60,10 @@ No process was initiated.
 function _install {
 	printf "install\n"
 
+	printf "Updating packages list\n"
+
+	sudo apt-get update -qq -y
+
 	for ix in ${!MANIFESTS[*]}
 	do
 		source ${PROVISION_DIR}/../manifests/${MANIFESTS[$ix]}.sh -i -y
