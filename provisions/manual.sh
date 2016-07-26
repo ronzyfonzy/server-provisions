@@ -1,13 +1,11 @@
 #!/usr/bin/env bash
 
-PROVISION_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-source "${PROVISION_DIR}/../common/base.sh"
+CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source "${CURRENT_DIR}/../common/base.sh"
 
 	###
 	# Variables
 	###
-
-MANIFESTS=("nginx" "php" "nodejs" "mysql" "adminer")
 
 	###
 	# Input checker
@@ -22,6 +20,10 @@ do
 		;;
 		-i | --install)
 			PROCESS="install"
+		;;
+		-d | --dir)
+			INSTALL_DIR="$2"
+			shift
 		;;
 		-u | --update)
 			PROCESS="update"
@@ -41,15 +43,7 @@ done
 ###
 
 function _help {
-	ALL_MANIFESTS=""
-	for ix in ${!MANIFESTS[*]}
-	do
-		ALL_MANIFESTS="${ALL_MANIFESTS}\n- ${MANIFESTS[$ix]}"
-	done
-
-	printf "This provisioning script will install the following manifests scripts:${ALL_MANIFESTS}
-
-No process was initiated.
+	printf "No process was initiated.
   -i, --install		Install
   -u, --update		Update
   --uninstall		Uninstall
@@ -59,15 +53,6 @@ No process was initiated.
 
 function _install {
 	printf "install\n"
-
-	printf "Updating packages list\n"
-
-	sudo apt-get update -qq -y
-
-	for ix in ${!MANIFESTS[*]}
-	do
-		source ${PROVISION_DIR}/../manifests/${MANIFESTS[$ix]}.sh -i -y
-	done
 }
 
 function _update {
@@ -76,11 +61,6 @@ function _update {
 
 function _uninstall {
 	printf "uninstall\n"
-
-	for ix in ${!MANIFESTS[*]}
-	do
-		source ${PROVISION_DIR}/../manifests/${MANIFESTS[$ix]}.sh --uninstall -y
-	done
 }
 
 case ${PROCESS} in

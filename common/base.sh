@@ -71,10 +71,6 @@ function installApt {
 		shift # past argument or value
 	done
 
-	#printf "Updating packages list\n"
-
-	#sudo apt-get update -qq -y
-
 	printf "Installing packages: ${PACKAGES}\n"
 
 	sudo apt-get install -qq -y -f ${PACKAGES}
