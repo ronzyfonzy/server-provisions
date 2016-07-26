@@ -4,7 +4,6 @@ sudo mkdir -p /home/vagrant/provision
 sudo git clone https://github.com/ronzyfonzy/server-provisions.git /home/vagrant/provision
 pushd .
 cd /home/vagrant/provision
-sudo git checkout develop
 sudo chmod +x provisions/default.sh
 sudo ./provisions/default.sh -i
 popd
